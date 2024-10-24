@@ -1,0 +1,178 @@
+<html>
+  <head>
+    <title>Kalkulator</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+      }
+      .sidebar {
+        width: 200px;
+        background-color: #d9534f;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding-top: 20px;
+      }
+      .sidebar a {
+        display: block;
+        color: white;
+        padding: 10px 15px;
+        text-decoration: none;
+      }
+      .sidebar a:hover {
+        background-color: #c9302c;
+      }
+      .content {
+        margin-left: 200px;
+        padding: 20px;
+      }
+      .breadcrumb {
+        margin-bottom: 20px;
+      }
+      .breadcrumb a {
+        color: #d9534f;
+        text-decoration: none;
+      }
+      .breadcrumb a:hover {
+        text-decoration: underline;
+      }
+      .calculator {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .calculator-display {
+        width: 100%;
+        height: 50px;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        text-align: right;
+        padding: 10px;
+        font-size: 18px;
+        margin-bottom: 10px;
+        overflow-x: auto;
+      }
+      .calculator-buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+      .calculator-buttons button {
+        width: 100%;
+        padding: 20px;
+        font-size: 18px;
+        border: 1px solid #ccc;
+        background-color: white;
+        cursor: pointer;
+      }
+      .calculator-buttons button:hover {
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <a href="#">Dashboard</a>
+      <a href="#">Users</a>
+      <a href="#">Mahasiswa</a>
+      <a href="#">Matakuliah</a>
+      <a href="#">Logout</a>
+    </div>
+    <div class="content">
+      <div class="breadcrumb">
+        <a href="#">home</a> / <a href="#">Dashboard</a>
+      </div>
+      <div class="calculator">
+        <div class="calculator-display" id="display">0</div>
+        <div class="calculator-buttons">
+          <button onclick="clearDisplay()">C</button>
+          <button onclick="appendOperator('/')">/</button>
+          <button onclick="appendOperator('*')">x</button>
+          <button onclick="deleteLast()">DEL</button>
+          <button onclick="appendNumber('7')">7</button>
+          <button onclick="appendNumber('8')">8</button>
+          <button onclick="appendNumber('9')">9</button>
+          <button onclick="appendOperator('-')">-</button>
+          <button onclick="appendNumber('4')">4</button>
+          <button onclick="appendNumber('5')">5</button>
+          <button onclick="appendNumber('6')">6</button>
+          <button onclick="appendOperator('+')">+</button>
+          <button onclick="appendNumber('1')">1</button>
+          <button onclick="appendNumber('2')">2</button>
+          <button onclick="appendNumber('3')">3</button>
+          <button onclick="calculate()">=</button>
+          <button onclick="appendNumber('0')">0</button>
+          <button onclick="appendDot()">.</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let display = document.getElementById("display");
+      let currentInput = "";
+      let hasDecimal = false;
+
+      function clearDisplay() {
+        currentInput = "";
+        display.textContent = "0";
+        hasDecimal = false;
+      }
+
+      function appendNumber(number) {
+        if (currentInput.length < 16) {
+          currentInput += number;
+          display.textContent = currentInput;
+        }
+      }
+
+      function appendOperator(operator) {
+        if (
+          currentInput !== "" &&
+          !isNaN(currentInput[currentInput.length - 1])
+        ) {
+          currentInput += operator;
+          display.textContent = currentInput;
+          hasDecimal = false; // reset decimal flag after operator
+        }
+      }
+
+      function appendDot() {
+        if (!hasDecimal) {
+          currentInput += ".";
+          display.textContent = currentInput;
+          hasDecimal = true;
+        }
+      }
+
+      function deleteLast() {
+        if (currentInput !== "") {
+          if (currentInput[currentInput.length - 1] === ".") {
+            hasDecimal = false;
+          }
+          currentInput = currentInput.slice(0, -1);
+          display.textContent = currentInput || "0";
+        }
+      }
+
+      function calculate() {
+        try {
+          currentInput = eval(currentInput).toString();
+          display.textContent = currentInput;
+          hasDecimal = currentInput.includes(".");
+        } catch (e) {
+          display.textContent = "Error";
+          currentInput = "";
+        }
+      }
+    </script>
+  </body>
+</html>
